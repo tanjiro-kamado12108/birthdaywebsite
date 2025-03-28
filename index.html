@@ -9,40 +9,85 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
         function startCelebration() {
-            // Play background music
             document.getElementById("bgMusic").play();
             
-            // Show a birthday wish
-            let wishMessage = document.getElementById("wishMessage");
-            wishMessage.textContent = "Happy Birthday Ananya! 🎂🎉 Wishing you lots of love and joy!";
-            wishMessage.classList.remove("hidden");
-            wishMessage.classList.add("fadeIn");
+            let slides = document.querySelectorAll(".slide");
+            let currentSlide = 0;
             
-            // Ensure confetti function exists before calling
+            function showSlide(index) {
+                gsap.to(".slideshow", { x: `-${index * 100}%`, duration: 1, ease: "power2.inOut" });
+            }
+            
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }, 4000);
+            
             if (typeof confetti === "function") {
                 confetti({
-                    particleCount: 100,
-                    spread: 160,
+                    particleCount: 200,
+                    spread: 180,
                     origin: { y: 0.6 },
-                    shapes: ['circle', 'heart']
+                    shapes: ['heart'],
+                    colors: ['#ff69b4', '#ff1493', '#ff4500', '#ff6347', '#ffa07a']
                 });
             } else {
                 console.error("Confetti function is not available.");
             }
             
-            // Floating balloons animation
             let balloons = document.getElementById("balloons");
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 15; i++) {
                 let balloon = document.createElement("div");
                 balloon.classList.add("balloon");
                 balloon.style.left = Math.random() * 90 + "%";
+                balloon.style.animationDuration = (Math.random() * 3 + 3) + "s";
                 balloons.appendChild(balloon);
             }
             
-            // Fireworks effect
-            gsap.to(".firework", {opacity: 1, scale: 1.5, duration: 1, stagger: 0.3, repeat: 3, yoyo: true});
+            gsap.to(".firework", {opacity: 1, scale: 2, duration: 1, stagger: 0.3, repeat: 5, yoyo: true});
         }
     </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            animation: backgroundAnimation 5s infinite alternate;
+        }
+        
+        @keyframes backgroundAnimation {
+            from { background-position: 0% 50%; }
+            to { background-position: 100% 50%; }
+        }
+        
+        .glow {
+            color: #fff;
+            text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493, 0 0 30px #ff4500;
+        }
+        
+        .slideshow-container {
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .slideshow {
+            display: flex;
+            width: 300%;
+        }
+        
+        .slide {
+            flex: 1;
+            min-width: 100vw;
+            text-align: center;
+            font-size: 2em;
+            color: white;
+            padding: 50px;
+        }
+    </style>
 </head>
 <body>
     <audio id="bgMusic" loop>
@@ -53,7 +98,14 @@
         <h1 class="glow bounce">🎉 Happy Birthday, Ananya! 🎉</h1>
         <p class="sub-text">Wishing you a day filled with love, joy, and lots of cake! 🎂✨</p>
         <button class="btn" onclick="startCelebration()">🎁 Open Your Surprise!</button>
-        <p id="wishMessage" class="hidden"></p>
+    </div>
+    
+    <div class="slideshow-container">
+        <div class="slideshow">
+            <div class="slide">🎂 Sending you warm birthday wishes! 🎂</div>
+            <div class="slide">🎉 Have an amazing year ahead! 🎉</div>
+            <div class="slide">💕 Lots of love and happiness to you! 💕</div>
+        </div>
     </div>
     
     <canvas id="confetti"></canvas>
